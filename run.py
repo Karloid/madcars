@@ -1,2 +1,2 @@
 import os
-os.system("python3 ../miniaicups/madcars/Runners/localrunner.py -f \"python3 ./main.py\"")
+os.system("zip -r py.zip main.py && python3 ../miniaicups/madcars/Runners/localrunner.py -s \"python3 ./main.py\"")
