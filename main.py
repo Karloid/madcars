@@ -4,7 +4,8 @@ import sys
 import json
 import math
 
-#hello
+
+# hello
 
 def eprint(*args, **kwargs):
     pass
@@ -21,12 +22,16 @@ def doMove(cmd):
 
 piHalf = math.pi / 2
 
+tick = 0
 while True:
+    tick = tick + 1
     inp = input()
     parsedInput = json.loads(inp)
     if parsedInput['type'] == 'new_match':
         eprint("new match start =======")
+        eprint(inp)
         parseNewMatch(parsedInput)
+        tick = 1
         continue
 
     # eprint(parsedInput['my_car'][1])
@@ -34,11 +39,17 @@ while True:
     myCarAngle = parsedInput['params']['my_car'][1]
     eprint("m " + str(myCarAngle))
 
-    desiredAngle = piHalf *  parsedInput['params']['my_car'][2]
+    desiredAngle = piHalf * parsedInput['params']['my_car'][2]
 
     cmd = 'right'
-    if myCarAngle > desiredAngle:
-        cmd = 'left'
+    cmdOposite = 'left'
+    delta = myCarAngle - desiredAngle
+    if delta > 0:
+        cmd = cmdOposite
+        cmdOposite = 'right'
 
-    eprint("m " + cmd + " " + str(myCarAngle))
+    if tick < 0 and abs(delta) < piHalf / 2 and tick % 5 != 0:
+        cmd = cmdOposite
+
+    eprint("tick " + str(tick) + " m " + cmd + " " + str(myCarAngle))
     doMove(cmd)
