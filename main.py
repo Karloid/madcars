@@ -56,12 +56,18 @@ while True:
     if tick < 50 and isCloseToPerfectAngle and tick % 5 != 0:
         cmd = cmdOposite
 
-    if tick > 50 and tick % 5 != 0 and abs(myCarAngle) < 1:
-        myX = worldParams['my_car'][0]
-        enemyX = worldParams['enemy_car'][0]
+    if tick > 50 and tick % 5 != 0:
+        myX = worldParams['my_car'][0][0]
+        enemyX = worldParams['enemy_car'][0][0]
 
-        cmd = 'left' if myX > enemyX else 'right'
-        eprint("tick " + str(tick) + " m " + cmd + " " + str(myCarAngle))
+        leftCmd = 'left'
+        rightCmd = 'right'
+        if abs(myCarAngle) > 1:
+            rightCmd = leftCmd
+            leftCmd = 'right'
+            
+        cmd = leftCmd if myX > enemyX else rightCmd
+        eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")
 
 
     doMove(cmd)
