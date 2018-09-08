@@ -1,4 +1,5 @@
 import math
+import sys
 
 twoPi = math.pi * 2
 
@@ -15,3 +16,17 @@ def normalizeAngle(angle):
     if angle > math.pi:
         angle -= twoPi
     return angle
+
+
+cerrEnabled = False
+
+if len(sys.argv) > 1:
+    cerrEnabled = sys.argv[1] == "1"
+
+
+# hello
+
+def eprint(*args, **kwargs):
+    pass
+    if cerrEnabled:
+        print(*args, file=sys.stderr, **kwargs)
