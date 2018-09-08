@@ -56,7 +56,7 @@ while True:
     if tick < 50 and isCloseToPerfectAngle and tick % 5 != 0:
         cmd = cmdOposite
 
-    if tick > 50 and tick % 3 != 0 and isCloseToPerfectAngle:
+    if tick > 50 and tick % 5 != 0 and abs(myCarAngle) < 1:
         myX = worldParams['my_car'][0]
         enemyX = worldParams['enemy_car'][0]
 
