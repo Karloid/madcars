@@ -1,8 +1,10 @@
-import stratsim
-import stratif
+
+
 
 if True:
+    import stratif
     stratif.go()
 else:
+    import stratsim
     stratsim.go()
 

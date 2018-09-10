@@ -4,9 +4,10 @@ import myutils
 from myutils import eprint
 import steps
 
-
 car_id = 1
 map_id = 1
+
+
 def parseNewMatch(parsedInput):
     map_id = parsedInput["params"]["proto_map"]["external_id"]
     car_id = parsedInput["params"]["proto_car"]["external_id"]
@@ -15,7 +16,7 @@ def parseNewMatch(parsedInput):
 
 def doMove(cmd):
     cmdStr = 'left' if cmd == -1 else 'right' if cmd == 1 else 'stop'
-    print(json.dumps({"command": cmdStr, 'debug': "debug"})) #debug from utils
+    print(json.dumps({"command": cmdStr, 'debug': "debug"}))  # debug from utils
 
 
 def go():
@@ -42,11 +43,8 @@ def go():
             continue
         eprint("do default strategy")
 
-
-
         myCarAngle = myutils.normalizeAngle(worldParams['my_car'][1])  # my angle
         # eprint("m " + str(myCarAngle))
-
 
         desiredAngle = (piHalf * 0.7) * mySide  # left or right
 
@@ -72,6 +70,6 @@ def go():
                 leftCmd = 1
 
             cmd = leftCmd if myX > enemyX else rightCmd
-            #eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")
+            # eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")
 
         doMove(cmd)
