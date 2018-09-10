@@ -9,7 +9,8 @@ def parseNewMatch(parsedInput):
 
 
 def doMove(cmd):
-    print(json.dumps({"command": cmd, 'debug': cmd}))
+    cmdStr = 'left' if cmd == -1 else 'right' if cmd == 1 else 'stop'
+    print(json.dumps({"command": cmdStr, 'debug': "debug"})) #debug from utils
 
 
 def go():
@@ -32,12 +33,12 @@ def go():
 
         desiredAngle = (piHalf * 0.7) * worldParams['my_car'][2]  # left or right
 
-        cmd = 'right'
-        cmdOposite = 'left'
+        cmd = 1
+        cmdOposite = -1
         delta = myCarAngle - desiredAngle
         if delta > 0:
             cmd = cmdOposite
-            cmdOposite = 'right'
+            cmdOposite = 1
 
         isCloseToPerfectAngle = abs(delta) < piHalf / 2
         if tick < 50 and isCloseToPerfectAngle and tick % 5 != 0:
@@ -47,11 +48,11 @@ def go():
             myX = worldParams['my_car'][0][0]
             enemyX = worldParams['enemy_car'][0][0]
 
-            leftCmd = 'left'
-            rightCmd = 'right'
+            leftCmd = -1
+            rightCmd = 1
             if abs(myCarAngle) > 1:
                 rightCmd = leftCmd
-                leftCmd = 'right'
+                leftCmd = 1
 
             cmd = leftCmd if myX > enemyX else rightCmd
             eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")

@@ -1,3 +1,3 @@
 import os
 os.system("zip -r py.zip main.py myutils.py stratif.py stratsim.py"
-          "&& python3 ../miniaicups/madcars/Runners/localrunner.py -s \"python3 ./main.py 1\"")
+          "&& python3 ../miniaicups/madcars/Runners/localrunner.py -s \"python3 ./main.py 0\"")

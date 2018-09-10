@@ -1,7 +1,7 @@
 import stratsim
 import stratif
 
-if False:
+if True:
     stratif.go()
 else:
     stratsim.go()
