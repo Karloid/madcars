@@ -16,8 +16,8 @@ def parseNewMatch(parsedInput):
 
 def doMove(cmd):
     cmdStr = 'left' if cmd == -1 else 'right' if cmd == 1 else 'stop'
-    print(json.dumps({"command": cmdStr, 'debug': "debug"}))  # debug from utils
-
+    print(json.dumps({"command": cmdStr, 'debug': myutils.debugCmd}))  # debug from utils
+    myutils.debugCmd = ""
 
 def go():
     piHalf = math.pi / 2

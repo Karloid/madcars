@@ -3,6 +3,8 @@ import sys
 
 twoPi = math.pi * 2
 
+debugCmd = ""
+
 
 def normalizeAngle(angle):
     # reduce the angle
@@ -26,7 +28,11 @@ if len(sys.argv) > 1:
 
 # hello
 
+
 def eprint(*args, **kwargs):
     pass
+    global debugCmd
     if cerrEnabled:
         print(*args, file=sys.stderr, **kwargs)
+    else:
+        debugCmd = debugCmd + "\n" + args[0]
