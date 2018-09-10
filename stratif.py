@@ -2,9 +2,14 @@ import json
 import math
 import myutils
 from myutils import eprint
+import steps
 
 
+car_id = 1
+map_id = 1
 def parseNewMatch(parsedInput):
+    map_id = parsedInput["params"]["proto_map"]["external_id"]
+    car_id = parsedInput["params"]["proto_car"]["external_id"]
     pass
 
 
@@ -28,10 +33,22 @@ def go():
             continue
 
         worldParams = parsedInput['params']
+        mySide = worldParams['my_car'][2]
+
+        nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
+        if not nextStep is None and True:
+            eprint(f"do step {nextStep}")
+            doMove(nextStep)
+            continue
+        eprint("do default strategy")
+
+
+
         myCarAngle = myutils.normalizeAngle(worldParams['my_car'][1])  # my angle
         # eprint("m " + str(myCarAngle))
 
-        desiredAngle = (piHalf * 0.7) * worldParams['my_car'][2]  # left or right
+
+        desiredAngle = (piHalf * 0.7) * mySide  # left or right
 
         cmd = 1
         cmdOposite = -1
@@ -55,6 +72,6 @@ def go():
                 leftCmd = 1
 
             cmd = leftCmd if myX > enemyX else rightCmd
-            eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")
+            #eprint(f"tick {tick}  {cmd} {myCarAngle} myX {myX} enemyX {enemyX}")
 
         doMove(cmd)
