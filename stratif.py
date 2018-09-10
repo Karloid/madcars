@@ -38,7 +38,7 @@ def go():
 
         nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
         if not nextStep is None and True:
-            eprint(f"do step {nextStep}")
+            #eprint(f"do step {nextStep}")
             doMove(nextStep)
             continue
         eprint("do default strategy")
