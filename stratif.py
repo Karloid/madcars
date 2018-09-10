@@ -36,9 +36,11 @@ def go():
         worldParams = parsedInput['params']
         mySide = worldParams['my_car'][2]
 
+        eprint(" map_id " + str(map_id) + " car_id " + str(car_id) + " tick " + str(tick) + " my side " + str(mySide))
+
         nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
         if not nextStep is None and True:
-            #eprint(f"do step {nextStep}")
+            eprint("do step " + str(nextStep))
             doMove(nextStep)
             continue
         eprint("do default strategy")
