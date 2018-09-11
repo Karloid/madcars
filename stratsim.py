@@ -3,6 +3,7 @@ import math
 import myutils
 from myutils import eprint
 
+import platform
 
 def parseNewMatch(parsedInput):
     pass
@@ -10,10 +11,11 @@ def parseNewMatch(parsedInput):
 
 def doMove(cmd):
     cmdStr = 'left' if cmd == -1 else 'right' if cmd == 1 else 'stop'
-    print(json.dumps({"command": cmdStr, 'debug': "debug"})) #debug from utils
-
+    print(json.dumps({"command": cmdStr, "debug": myutils.debugCmd})) #debug from utils
+    myutils.debugCmd = ""
 
 def go():
+    eprint("python version is " + platform.python_version())
     piHalf = math.pi / 2
     tick = 0
     while True:
@@ -29,4 +31,4 @@ def go():
 
         worldParams = parsedInput['params']
 
-        doMove(0)
+        doMove(1)

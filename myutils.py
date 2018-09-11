@@ -3,7 +3,7 @@ import sys
 
 twoPi = math.pi * 2
 
-debugCmd = ""
+debugCmd = " "
 
 
 def normalizeAngle(angle):
@@ -36,3 +36,10 @@ def eprint(*args, **kwargs):
         print(*args, file=sys.stderr, **kwargs)
     else:
         debugCmd = debugCmd + "\n" + args[0]
+
+
+def getDebugCmd():
+    global debugCmd
+    cmd = debugCmd
+    debugCmd = " "
+    return cmd

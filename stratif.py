@@ -3,6 +3,7 @@ import math
 import myutils
 from myutils import eprint
 import steps
+import platform
 
 car_id = 1
 map_id = 1
@@ -16,10 +17,11 @@ def parseNewMatch(parsedInput):
 
 def doMove(cmd):
     cmdStr = 'left' if cmd == -1 else 'right' if cmd == 1 else 'stop'
-    print(json.dumps({"command": cmdStr, 'debug': myutils.debugCmd}))  # debug from utils
-    myutils.debugCmd = ""
+    print(json.dumps({"command": cmdStr, "debug": myutils.getDebugCmd()}))
+
 
 def go():
+    eprint("python version is " + platform.python_version())
     piHalf = math.pi / 2
     tick = 0
     while True:
@@ -38,11 +40,13 @@ def go():
 
         eprint(" map_id " + str(map_id) + " car_id " + str(car_id) + " tick " + str(tick) + " my side " + str(mySide))
 
-        nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
-        if not nextStep is None and True:
-            eprint("do step " + str(nextStep))
-            doMove(nextStep)
-            continue
+        if False:
+            nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
+            if not nextStep is None:
+                eprint("do step " + str(nextStep))
+                doMove(nextStep)
+                continue
+                
         eprint("do default strategy")
 
         myCarAngle = myutils.normalizeAngle(worldParams['my_car'][1])  # my angle
