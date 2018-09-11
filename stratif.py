@@ -10,6 +10,7 @@ map_id = 1
 
 
 def parseNewMatch(parsedInput):
+    global car_id, map_id
     map_id = parsedInput["params"]["proto_map"]["external_id"]
     car_id = parsedInput["params"]["proto_car"]["external_id"]
     pass
@@ -30,7 +31,7 @@ def go():
         parsedInput = json.loads(inp)
         if parsedInput['type'] == 'new_match':
             eprint("new match start =======")
-            eprint(inp)
+            # eprint(inp)
             parseNewMatch(parsedInput)
             tick = 1
             continue
@@ -40,13 +41,12 @@ def go():
 
         eprint(" map_id " + str(map_id) + " car_id " + str(car_id) + " tick " + str(tick) + " my side " + str(mySide))
 
-        if False:
-            nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
-            if not nextStep is None:
-                eprint("do step " + str(nextStep))
-                doMove(nextStep)
-                continue
-                
+        nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
+        if not (nextStep is None):
+            eprint("do step " + str(nextStep))
+            doMove(nextStep)
+            continue
+
         eprint("do default strategy")
 
         myCarAngle = myutils.normalizeAngle(worldParams['my_car'][1])  # my angle
