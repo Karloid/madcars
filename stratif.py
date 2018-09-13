@@ -41,18 +41,20 @@ def go():
 
         eprint(" map_id " + str(map_id) + " car_id " + str(car_id) + " tick " + str(tick) + " my side " + str(mySide))
 
-        nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
-        if not (nextStep is None):
-            eprint("do step " + str(nextStep))
-            doMove(nextStep)
-            continue
+        #nextStep = steps.getStepSafe(map_id, car_id, tick, mySide)
+        #if not (nextStep is None):
+        #    eprint("do step " + str(nextStep))
+        #    doMove(nextStep)
+        #    continue
 
         eprint("do default strategy")
 
         myCarAngle = myutils.normalizeAngle(worldParams['my_car'][1])  # my angle
         # eprint("m " + str(myCarAngle))
 
-        desiredAngle = (piHalf * 0.7) * mySide  # left or right
+        isBus = car_id == 2
+        angleKoeff = 0.7 if not isBus else 1
+        desiredAngle = (piHalf * angleKoeff) * mySide  # left or right
 
         cmd = 1
         cmdOposite = -1
@@ -62,10 +64,10 @@ def go():
             cmdOposite = 1
 
         isCloseToPerfectAngle = abs(delta) < piHalf / 2
-        if tick < 50 and isCloseToPerfectAngle and tick % 5 != 0:
+        if tick < 50 and isCloseToPerfectAngle and tick % 5 != 0 and not isBus:
             cmd = cmdOposite
 
-        if tick > 50 and tick % 5 != 0:
+        if tick > 50 and tick % 5 != 0 and not isBus:
             myX = worldParams['my_car'][0][0]
             enemyX = worldParams['enemy_car'][0][0]
 
