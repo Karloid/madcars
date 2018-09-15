@@ -8,7 +8,7 @@ class MyStrategy : Strategy {
     private lateinit var move: Move
 
 
-    val ON_AIR_PAUSE = 20
+    val ON_AIR_PAUSE = 0
 
     var tick = 0
 
@@ -39,27 +39,27 @@ class MyStrategy : Strategy {
 
         move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
 
-        var myCarAngle = world.myCar.angle
+        val myCarAngle = world.myCar.angle
 
-        var angleKoeff = if (isBus) 1f else 0.7f
-        var desiredAngle = (HALF_PI * angleKoeff) * getMySide()
+        val angleKoeff = if (isBus) 1f else 0.7f
+        val desiredAngle = (HALF_PI * angleKoeff) * getMySide()
 
         var cmd = 1
 
-        var delta = myCarAngle - desiredAngle
+        val delta = myCarAngle - desiredAngle
         if (delta > 0) {
             cmd *= -1
         }
 
-        var isCloseToPerfectAngle = abs(delta) < HALF_PI / 2
+        val isCloseToPerfectAngle = abs(delta) < HALF_PI / 2
 
-        if (tick < 10 && isCloseToPerfectAngle && tick % 5 != 0 && !isBus) {
+        if (tick < ON_AIR_PAUSE && isCloseToPerfectAngle && tick % 5 != 0 && !isBus) {
             cmd *= -1
         }
 
         if (tick > 50 && tick % 5 != 0 && !isBus) {
-            var myX = world.myCar.x
-            var enemyX = world.enemyCar.x
+            val myX = world.myCar.x
+            val enemyX = world.enemyCar.x
 
             var leftCmd = -1
             var rightCmd = 1
