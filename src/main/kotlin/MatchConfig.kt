@@ -1,3 +1,4 @@
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -13,10 +14,22 @@ class MatchConfig(params: JSONObject) {
     val carId: Int
     var mapId: Int
 
+    var buttonPoly = ArrayList<Point2D>()
+
     init {
         myLives = params.getInt("my_lives")
         enemyLives = params.getInt("enemy_lives")
-        carId = params.getJSONObject("proto_car").getInt("external_id")
+        val protoCar = params.getJSONObject("proto_car")
+        carId = protoCar.getInt("external_id")
+
+        buttonPoly.clear()
+        val buttonPolyJson = protoCar.getJSONArray("button_poly")
+        for (o in buttonPolyJson) {
+            if (o is JSONArray) {
+                buttonPoly.add(Point2D(o.getInt(0), o.getInt(1)))
+            }
+        }
+
         mapId = params.getJSONObject("proto_map").getInt("external_id")
         // ...
     }

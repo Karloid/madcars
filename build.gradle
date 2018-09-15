@@ -42,19 +42,29 @@ shadowJar() {
 
 build.dependsOn shadowJar
 
-def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1"'
-def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1"'
+def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" -s \"python3 ./main.py 0\"'
+def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" -s \"python3 ./main.py 0\"'
 
 task killLr(type: Exec, dependsOn: 'shadowJar') {
     commandLine 'sh', '-c', './kill.sh'
 }
 
-task runLr(type: Exec, dependsOn: 'killLr') {
+task doZip(type: Exec, dependsOn: 'killLr') {
 
     commandLine 'sh', '-c', 'cd ./src/main/kotlin;' +
             ' zip -r -X "../../../lastSources.zip" * -x LibGdxPainter.java -x LibGdxObj.java -x LibGdxShower.java ' +
-            '-x LibGdxDataToPaint.java && cd ../../../ &&' + runN
+            '-x LibGdxDataToPaint.java && cd ../../../'
 }
+
+task runLrD(type: Exec, dependsOn: 'doZip') {
+
+    commandLine 'sh', '-c', runS
+}
+task runLrN(type: Exec, dependsOn: 'doZip') {
+
+    commandLine 'sh', '-c', runN
+}
+
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

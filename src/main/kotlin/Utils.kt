@@ -15,3 +15,24 @@ fun normalizeAngle(angle: Float): Float {
     return result
 }
 
+fun f(v: Double): String {
+    return String.format("%.2f", v)
+}
+
+fun f(v: Float): String {
+    return String.format("%.2f", v)
+}
+
+fun Number.f(): String {
+    return String.format("%.2f", this)
+}
+
+fun Float.asPi(): Number {
+    return this / Math.PI
+}
+
+fun Double.asPi(): Number {
+    return this / Math.PI
+}
+
+

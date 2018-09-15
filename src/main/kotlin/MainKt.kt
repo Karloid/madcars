@@ -24,6 +24,9 @@ object MainKt {
                     }
 
                     MessageType.new_match -> {
+                        if (isLocal) {
+                            System.err.println(gameMessage.toString(2))
+                        }
                         val matchConfig = MatchConfig(gameMessage.getJSONObject("params"))
                         robot.onMatchStarted(matchConfig)
                     }

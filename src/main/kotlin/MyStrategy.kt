@@ -17,6 +17,8 @@ class MyStrategy : Strategy {
 
     private lateinit var match: MatchConfig
 
+    private var maxMinButtonY: Float = -1f
+    private var desiredAngleForBus: Float = 0f
 
     private var isBus: Boolean = false
 
@@ -27,6 +29,10 @@ class MyStrategy : Strategy {
 
         isBus = match.carId == 2
 
+        debugMessage += "\n" + match.buttonPoly
+
+        myLastAngle = 0f //TODO state
+
     }
 
     override fun onNextTick(world: World, move: Move) {
@@ -35,14 +41,59 @@ class MyStrategy : Strategy {
         simpleStrategy()
     }
 
+
+    private var myLastAngle: Float = 0f
+
+    private var myAngleSpeed: Float = 0f
+
     private fun simpleStrategy() {
 
-        move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
+        //move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
 
         val myCarAngle = world.myCar.angle
+        myAngleSpeed = myLastAngle - myCarAngle
+        myLastAngle = myCarAngle
+
+        move.d("myXY ${world.myCar.x.f()} - ${world.myCar.y.f()} a: ${myCarAngle.f()} as PI: ${world.myCar.angle.asPi().f()} " +
+                "angleSpeed ${myAngleSpeed}")
+
+
 
         val angleKoeff = if (isBus) 1f else 0.7f
-        val desiredAngle = (HALF_PI * angleKoeff) * getMySide()
+
+        var desiredAngle = (HALF_PI * angleKoeff) * getMySide()
+
+        if (isBus) {
+            val minButtonY = getMinButtonY(world.myCar)
+            if (minButtonY > maxMinButtonY) {
+                maxMinButtonY = minButtonY
+                desiredAngleForBus = myCarAngle
+                move.d("found best angle ${myCarAngle.f()} which y ${maxMinButtonY}")
+            }
+
+            if (tick > 80) {
+               // move.d("set desiredAngle from ${desiredAngle.f()} to ${desiredAngleForBus}")
+                desiredAngle = desiredAngleForBus
+
+                var cmd = 1
+
+                val delta = myCarAngle - desiredAngle
+                if (delta > 0) {
+                    cmd *= -1
+                }
+
+                if (Math.abs(myAngleSpeed) > 0.00436248
+                        && ((cmd < 0 && myAngleSpeed > 0) || (cmd > 0 && myAngleSpeed < 0))) {
+                    cmd *= -1
+                }
+
+                move.set(cmd)
+
+                return
+            }
+        }
+
+
 
         var cmd = 1
 
@@ -57,6 +108,8 @@ class MyStrategy : Strategy {
             cmd *= -1
         }
 
+
+
         if (tick > 50 && tick % 5 != 0 && !isBus) {
             val myX = world.myCar.x
             val enemyX = world.enemyCar.x
@@ -64,7 +117,7 @@ class MyStrategy : Strategy {
             var leftCmd = -1
             var rightCmd = 1
             if (abs(myCarAngle) > 1) {  //whut
-                move.d("strange switch on")
+                //move.d("strange switch on")
                 rightCmd = leftCmd
                 leftCmd = 1
             }
@@ -72,6 +125,18 @@ class MyStrategy : Strategy {
         }
 
         move.set(cmd)
+    }
+
+    private fun getMinButtonY(myCar: World.Car): Float {
+        return match.buttonPoly.map {
+            val rotated = it.rotate(myCar.angle.toDouble())
+            rotated.y
+        }.min()!!.toFloat()
+    }
+
+    private fun getRotatedButtonPoly(myCar: World.Car): List<Point2D> {
+
+        return match.buttonPoly.map { it.rotate(myCar.angle.toDouble()) }
     }
 
 

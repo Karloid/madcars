@@ -26,6 +26,7 @@ class Move internal constructor() {
                 "right"
             }
         }
+        d(command)
     }
 
     fun d(debugMessage: String) {
