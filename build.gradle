@@ -42,8 +42,10 @@ shadowJar() {
 
 build.dependsOn shadowJar
 
-def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" -s \"python3 ./main.py 0\"'
-def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" -s \"python3 ./main.py 0\"'
+def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
+        '-f \"python3 ./main.py 0\"'
+def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
+        '-f \"python3 ./main.py 0\"'
 
 task killLr(type: Exec, dependsOn: 'shadowJar') {
     commandLine 'sh', '-c', './kill.sh'

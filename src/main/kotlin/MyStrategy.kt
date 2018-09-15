@@ -129,7 +129,11 @@ class MyStrategy : Strategy {
 
     private fun getMinButtonY(myCar: World.Car): Float {
         return match.buttonPoly.map {
-            val rotated = it.rotate(myCar.angle.toDouble())
+            var point = it
+            if (getMySide() == -1){
+                point = Point2D(-it.x, it.y)
+            }
+            val rotated = point.rotate(myCar.angle.toDouble())
             rotated.y
         }.min()!!.toFloat()
     }
