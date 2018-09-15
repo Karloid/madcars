@@ -46,7 +46,10 @@ def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agent
 def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1"'
 
 task runLr(type: Exec, dependsOn: 'shadowJar') {
-    commandLine 'sh', '-c', runN
+
+    commandLine 'sh', '-c', 'cd ./src/main/kotlin;' +
+            ' zip -r -X "../../../lastSources.zip" * -x LibGdxPainter.java -x LibGdxObj.java -x LibGdxShower.java ' +
+            '-x LibGdxDataToPaint.java && cd ../../../ &&' + runN
 }
 
 compileKotlin {
