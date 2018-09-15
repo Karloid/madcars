@@ -45,7 +45,11 @@ build.dependsOn shadowJar
 def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1"'
 def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1"'
 
-task runLr(type: Exec, dependsOn: 'shadowJar') {
+task killLr(type: Exec, dependsOn: 'shadowJar') {
+    commandLine 'sh', '-c', './kill.sh'
+}
+
+task runLr(type: Exec, dependsOn: 'killLr') {
 
     commandLine 'sh', '-c', 'cd ./src/main/kotlin;' +
             ' zip -r -X "../../../lastSources.zip" * -x LibGdxPainter.java -x LibGdxObj.java -x LibGdxShower.java ' +

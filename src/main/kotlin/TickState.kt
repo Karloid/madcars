@@ -19,7 +19,7 @@ class TickState(params: JSONObject) {
     }
 
     inner class Car(carParam: JSONArray) {
-        var mirror: Int = 1 // слева = +1, справа = -1
+        var side: Int = 1 // слева = +1, справа = -1
 
         var x: Float = 0f
         var y: Float = 0f
@@ -33,7 +33,7 @@ class TickState(params: JSONObject) {
             y = pos.getFloat(1)
 
             angle = carParam.getFloat(1)
-            mirror = carParam.getInt(2)
+            side = carParam.getInt(2)
 
             wheel.rear = Wheel(carParam.getJSONArray(3))
             wheel.front = Wheel(carParam.getJSONArray(4))

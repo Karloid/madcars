@@ -4,6 +4,6 @@
  */
 interface Strategy {
     fun onMatchStarted(matchConfig: MatchConfig)
-    fun onNextTick(tickState: TickState)
+    fun onNextTick(tickState: TickState, move: Move)
     fun onParsingError(message: String)
 }

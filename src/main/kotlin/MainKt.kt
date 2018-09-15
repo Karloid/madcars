@@ -15,7 +15,9 @@ object MainKt {
                 when (messageType) {
                     MessageType.tick -> {
                         val tickState = TickState(gameMessage.getJSONObject("params"))
-                        robot.onNextTick(tickState)
+                        val move = Move()
+                        robot.onNextTick(tickState, move)
+                        move.send()
                     }
 
                     MessageType.new_match -> {
