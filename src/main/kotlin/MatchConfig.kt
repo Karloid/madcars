@@ -5,17 +5,19 @@ import org.json.JSONObject
  * Передается на вход обработчика `onMatchStarted` интерфейса [Strategy]
  */
 
-class MatchConfig
-// ...
-
-(params: JSONObject) {
+class MatchConfig(params: JSONObject) {
     //todo добавить нужные поля и классы и реализовать десериализацию json-объекта
-    internal var myLives: Int = 0
-    internal var enemyLives: Int = 0
+    var myLives: Int = 0
+    var enemyLives: Int = 0
+
+    val carId: Int
+    var mapId: Int
 
     init {
         myLives = params.getInt("my_lives")
         enemyLives = params.getInt("enemy_lives")
+        carId = params.getJSONObject("proto_car").getInt("external_id")
+        mapId = params.getJSONObject("proto_map").getInt("external_id")
         // ...
     }
 }

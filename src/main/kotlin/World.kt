@@ -6,7 +6,7 @@ import org.json.JSONObject
  * Передается на вход обработчика `onNextTick` интерфейса [Strategy]
  */
 
-class TickState(params: JSONObject) {
+class World(params: JSONObject) {
     var myCar: Car
     var enemyCar: Car
     var deadLine: Float = 0.toFloat()
@@ -32,12 +32,13 @@ class TickState(params: JSONObject) {
             x = pos.getFloat(0)
             y = pos.getFloat(1)
 
-            angle = carParam.getFloat(1)
+            angle = normalizeAngle(carParam.getFloat(1))
             side = carParam.getInt(2)
 
             wheel.rear = Wheel(carParam.getJSONArray(3))
             wheel.front = Wheel(carParam.getJSONArray(4))
         }
+
 
         inner class WheelPair {
             var rear: Wheel? = null

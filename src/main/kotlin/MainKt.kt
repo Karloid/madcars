@@ -1,10 +1,13 @@
 import org.json.JSONObject
 
+var isLocal: Boolean = false
 object MainKt {
     private var robot: Strategy = MyStrategy()
 
+
     @JvmStatic
     fun main(args: Array<String>) {
+        isLocal = args.size > 0
 
         var gameMessage: JSONObject?
         gameMessage = JsonIO.readFromStdIn()
@@ -14,7 +17,7 @@ object MainKt {
                 messageType = gameMessage.getEnum(MessageType::class.java, "type")
                 when (messageType) {
                     MessageType.tick -> {
-                        val tickState = TickState(gameMessage.getJSONObject("params"))
+                        val tickState = World(gameMessage.getJSONObject("params"))
                         val move = Move()
                         robot.onNextTick(tickState, move)
                         move.send()
@@ -26,6 +29,9 @@ object MainKt {
                     }
                 }
             } catch (e: Exception) {
+                if (isLocal) {
+                    e.printStackTrace()
+                }
                 robot.onParsingError(e.message ?: "unknown")
             }
             gameMessage = JsonIO.readFromStdIn()

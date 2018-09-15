@@ -1,6 +1,5 @@
 import org.json.JSONObject
 
-val commands = arrayOf("left", "stop", "right")
 
 class Move internal constructor() {
 
@@ -15,10 +14,24 @@ class Move internal constructor() {
     }
 
     fun set(cmd: Int) {
-        command = commands[cmd - 1]
+
+        command = when (cmd) {
+            -1 -> {
+                "left"
+            }
+            0 -> {
+                "stop"
+            }
+            else -> {
+                "right"
+            }
+        }
     }
 
-    fun addDebug(debugMessage: String) {
+    fun d(debugMessage: String) {
         debug += "\n" + debugMessage
+        if (isLocal) {
+            System.err.println(debugMessage)
+        }
     }
 }
