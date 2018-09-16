@@ -55,45 +55,19 @@ class MyStrategy : Strategy {
         myLastAngle = myCarAngle
 
         move.d("myXY ${world.myCar.x.f()} - ${world.myCar.y.f()} a: ${myCarAngle.f()} as PI: ${world.myCar.angle.asPi().f()} " +
-                "angleSpeed ${myAngleSpeed}")
+                "angleSpeed $myAngleSpeed")
+
+       // move.d("enemyXY ${world.enemyCar.x.f()} - ${world.enemyCar.y.f()}")
 
 
 
-        val angleKoeff = if (isBus) 1f else 0.7f
-
-        var desiredAngle = (HALF_PI * angleKoeff) * getMySide()
 
         if (isBus) {
-            val minButtonY = getMinButtonY(world.myCar)
-            if (minButtonY > maxMinButtonY) {
-                maxMinButtonY = minButtonY
-                desiredAngleForBus = myCarAngle
-                move.d("found best angle ${myCarAngle.f()} which y ${maxMinButtonY}")
-            }
-
-            if (tick > 80) {
-               // move.d("set desiredAngle from ${desiredAngle.f()} to ${desiredAngleForBus}")
-                desiredAngle = desiredAngleForBus
-
-                var cmd = 1
-
-                val delta = myCarAngle - desiredAngle
-                if (delta > 0) {
-                    cmd *= -1
-                }
-
-                if (Math.abs(myAngleSpeed) > 0.00436248
-                        && ((cmd < 0 && myAngleSpeed > 0) || (cmd > 0 && myAngleSpeed < 0))) {
-                    cmd *= -1
-                }
-
-                move.set(cmd)
-
-                return
-            }
+            doBusStart()
+            return
         }
 
-
+        var desiredAngle = (HALF_PI * 0.7f) * getMySide()
 
         var cmd = 1
 
@@ -125,6 +99,45 @@ class MyStrategy : Strategy {
         }
 
         move.set(cmd)
+    }
+
+    fun doBusStart() {
+        val myCarAngle = world.myCar.angle
+
+        var desiredAngle = (HALF_PI * 1) * getMySide()
+        val minButtonY = getMinButtonY(world.myCar)
+        if (minButtonY > maxMinButtonY) {
+            maxMinButtonY = minButtonY
+            desiredAngleForBus = myCarAngle
+            move.d("found best angle ${myCarAngle.f()} which y ${maxMinButtonY}")
+        }
+
+        if (tick > 80) {
+            // move.d("set desiredAngle from ${desiredAngle.f()} to ${desiredAngleForBus}")
+            desiredAngle = desiredAngleForBus
+
+            var cmd = 1
+
+            val delta = myCarAngle - desiredAngle
+            if (delta > 0) {
+                cmd *= -1
+            }
+
+            if (abs(myAngleSpeed) > 0.00436248
+                    && ((cmd < 0 && myAngleSpeed > 0) || (cmd > 0 && myAngleSpeed < 0))) {
+                cmd *= -1
+            }
+
+            move.set(cmd)
+
+            return
+        }
+        var cmd = 1
+
+        val delta = myCarAngle - desiredAngle
+        if (delta > 0) {
+            cmd *= -1
+        }
     }
 
     private fun getMinButtonY(myCar: World.Car): Float {

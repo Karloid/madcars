@@ -42,10 +42,15 @@ shadowJar() {
 
 build.dependsOn shadowJar
 
-def runS = 'python3 ../miniaicups/madcars/Runners/localrunner.py -s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
-        '-f \"python3 ./main.py 0\"'
-def runN = 'python3 ../miniaicups/madcars/Runners/localrunner.py -s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
-        '-f \"python3 ./main.py 0\"'
+private static String getLr(String suspend) {
+    return 'python3 ../miniaicups/madcars/Runners/localrunner.py ' +
+
+            '-s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
+            ',address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
+            '-m PillHillMap,Bus PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHubbleMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
+            //'-f \"python3 ./main.py 0\"' +
+            ''
+}
 
 task killLr(type: Exec, dependsOn: 'shadowJar') {
     commandLine 'sh', '-c', './kill.sh'
@@ -60,11 +65,11 @@ task doZip(type: Exec, dependsOn: 'killLr') {
 
 task runLrD(type: Exec, dependsOn: 'doZip') {
 
-    commandLine 'sh', '-c', runS
+    commandLine 'sh', '-c', getLr('y')
 }
 task runLrN(type: Exec, dependsOn: 'doZip') {
 
-    commandLine 'sh', '-c', runN
+    commandLine 'sh', '-c', getLr('n')
 }
 
 
