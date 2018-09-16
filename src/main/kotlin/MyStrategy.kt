@@ -15,7 +15,7 @@ class MyStrategy : Strategy {
     var matchCounter = 0
 
 
-    private lateinit var match: MatchConfig
+    private lateinit var m: MatchConfig
 
     private var maxMinButtonY: Float = -1f
     private var desiredAngleForBus: Float = 0f
@@ -27,11 +27,11 @@ class MyStrategy : Strategy {
     override fun onMatchStarted(matchConfig: MatchConfig) {
         tick = 0
         matchCounter++
-        this.match = matchConfig
+        this.m = matchConfig
 
-        isBus = match.carId == 2
+        isBus = m.carId == 2
 
-        debugMessage += "\n" + match.buttonPoly
+        debugMessage += "\n" + m.buttonPoly
 
         s = State()
     }
@@ -55,10 +55,10 @@ class MyStrategy : Strategy {
        // move.d("enemyXY ${w.enemyCar.x.f()} - ${w.enemyCar.y.f()}")
 
 
-        when (match.carType) {
+        when (m.carType) {
             CarType.Bus -> {
 
-                when (match.mapType) {
+                when (m.mapType) {
                     MapType.PillMap -> {
                     }
                     MapType.PillHubbleMap -> {
@@ -79,13 +79,13 @@ class MyStrategy : Strategy {
             }
             CarType.Buggy, CarType.SquareWheelsBuggy -> {
 
-                when (match.mapType) {
+                when (m.mapType) {
                     MapType.PillMap -> {
                     }
                     MapType.PillHubbleMap -> {
                     }
                     MapType.PillHillMap -> {
-                        doPillHillMapStrat { doSimpleAngleStrat() }
+                        doPillHillMapStrat { doSimpleAngleStrat(if (m.carType == CarType.Buggy) 1f else 0.7f) }
                         return
                     }
                     MapType.PillCarcassMap -> {
@@ -96,7 +96,7 @@ class MyStrategy : Strategy {
                     }
                 }
 
-                doSimpleAngleStrat()
+                doSimpleAngleStrat(0.7f)
             }
         }
     }
@@ -126,8 +126,8 @@ class MyStrategy : Strategy {
 
     }
 
-    fun doSimpleAngleStrat() {
-        var desiredAngle = (HALF_PI * 0.7f) * getMySide()
+    fun doSimpleAngleStrat(angleKoeff: Float) {
+        var desiredAngle = (HALF_PI * angleKoeff) * getMySide()
 
         var cmd = 1
 
@@ -201,7 +201,7 @@ class MyStrategy : Strategy {
     }
 
     private fun getMinButtonY(myCar: Car): Float {
-        return match.buttonPoly.map {
+        return m.buttonPoly.map {
             var point = it
             if (getMySide() == -1){
                 point = Point2D(-it.x, it.y)
@@ -213,7 +213,7 @@ class MyStrategy : Strategy {
 
     private fun getRotatedButtonPoly(myCar: Car): List<Point2D> {
 
-        return match.buttonPoly.map { it.rotate(myCar.angle.toDouble()) }
+        return m.buttonPoly.map { it.rotate(myCar.angle.toDouble()) }
     }
 
 

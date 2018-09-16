@@ -49,8 +49,8 @@ private static String getLr(String suspend) {
             ',address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
             //'-s "python3 ./main.py 0" ' +
            // '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,Buggy IslandHoleMap,SquareWheelsBuggy' +
-           // '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
-            '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus' +
+            '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
+           // '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus' +
             ''
 }
 
