@@ -22,6 +22,8 @@ class MyStrategy : Strategy {
 
     private var isBus: Boolean = false
 
+    private var s = State()
+
     override fun onMatchStarted(matchConfig: MatchConfig) {
         tick = 0
         matchCounter++
@@ -31,8 +33,7 @@ class MyStrategy : Strategy {
 
         debugMessage += "\n" + match.buttonPoly
 
-        myLastAngle = 0f //TODO state
-
+        s = State()
     }
 
     override fun onNextTick(world: World, move: Move) {
@@ -42,36 +43,76 @@ class MyStrategy : Strategy {
     }
 
 
-    private var myLastAngle: Float = 0f
-
-    private var myAngleSpeed: Float = 0f
-
     private fun simpleStrategy() {
 
         //move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
 
-        val myCarAngle = world.myCar.angle
-        myAngleSpeed = myLastAngle - myCarAngle
-        myLastAngle = myCarAngle
+        s.myCarAngle = world.myCar.angle
+        s.myAngleSpeed = s.myLastAngle - s.myCarAngle
+        s.myLastAngle = s.myCarAngle
 
-        move.d("myXY ${world.myCar.x.f()} - ${world.myCar.y.f()} a: ${myCarAngle.f()} as PI: ${world.myCar.angle.asPi().f()} " +
-                "angleSpeed $myAngleSpeed")
+        move.d("myXY ${world.myCar.x.f()} - ${world.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${world.myCar.angle.asPi().f()} " +
+                "angleSpeed ${s.myAngleSpeed}")
 
        // move.d("enemyXY ${world.enemyCar.x.f()} - ${world.enemyCar.y.f()}")
 
 
+        when (match.carType) {
+            CarType.Bus -> {
+                doBusStart()
+                return
+            }
+            CarType.Buggy, CarType.SquareWheelsBuggy -> {
 
+                when (match.mapType) {
+                    MapType.PillMap -> {
+                    }
+                    MapType.PillHubbleMap -> {
+                    }
+                    MapType.PillHillMap -> {
+                        doPillHillMapStrat()
+                        return
+                    }
+                    MapType.PillCarcassMap -> {
+                    }
+                    MapType.IslandMap -> {
+                    }
+                    MapType.IslandHoleMap -> {
+                    }
+                }
 
-        if (isBus) {
-            doBusStart()
+                doSimpleAngleStrat()
+            }
+        }
+    }
+
+    private fun doPillHillMapStrat() {
+        val x = world.myCar.getMirroredX()
+        var cmd = 1
+        s.reach120x = x < 120 || s.reach120x
+        s.reach440x = (s.reach120x && x > 400) || s.reach440x
+        if (tick < 30) {
+            cmd = 0
+        } else if (s.reach440x) {
+            s.allowedToAttack = false
+            doSimpleAngleStrat()
             return
+        } else if (s.reach120x) {
+            cmd = 1
+        } else {
+            cmd = -1
         }
 
+        move.set(cmd * world.myCar.side)
+
+    }
+
+    fun doSimpleAngleStrat() {
         var desiredAngle = (HALF_PI * 0.7f) * getMySide()
 
         var cmd = 1
 
-        val delta = myCarAngle - desiredAngle
+        val delta = s.myCarAngle - desiredAngle
         if (delta > 0) {
             cmd *= -1
         }
@@ -84,13 +125,13 @@ class MyStrategy : Strategy {
 
 
 
-        if (tick > 50 && tick % 5 != 0 && !isBus) {
+        if (tick > 50 && tick % 5 != 0 && !isBus && s.allowedToAttack) {
             val myX = world.myCar.x
             val enemyX = world.enemyCar.x
 
             var leftCmd = -1
             var rightCmd = 1
-            if (abs(myCarAngle) > 1) {  //whut
+            if (abs(s.myCarAngle) > 1) {  //whut
                 //move.d("strange switch on")
                 rightCmd = leftCmd
                 leftCmd = 1
@@ -123,8 +164,8 @@ class MyStrategy : Strategy {
                 cmd *= -1
             }
 
-            if (abs(myAngleSpeed) > 0.00436248
-                    && ((cmd < 0 && myAngleSpeed > 0) || (cmd > 0 && myAngleSpeed < 0))) {
+            if (abs(s.myAngleSpeed) > 0.00436248
+                    && ((cmd < 0 && s.myAngleSpeed > 0) || (cmd > 0 && s.myAngleSpeed < 0))) {
                 cmd *= -1
             }
 
@@ -175,4 +216,15 @@ class MyStrategy : Strategy {
         debugMessage = message
     }
 
+}
+
+class State {
+    var myLastAngle: Float = 0f
+    var myAngleSpeed: Float = 0f
+
+    //pillHill
+    var reach120x: Boolean = false
+    var reach440x: Boolean = false
+    var myCarAngle: Float = 0f
+    var allowedToAttack: Boolean = true
 }

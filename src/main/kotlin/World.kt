@@ -1,11 +1,6 @@
 import org.json.JSONArray
 import org.json.JSONObject
 
-/**
- * Состояние мира, присылаемое сервером на каждом тике.
- * Передается на вход обработчика `onNextTick` интерфейса [Strategy]
- */
-
 class World(params: JSONObject) {
     var myCar: Car
     var enemyCar: Car
@@ -19,6 +14,16 @@ class World(params: JSONObject) {
     }
 
     inner class Car(carParam: JSONArray) {
+
+
+        fun getMirroredX(): Float {
+            if (side == 1) {
+                return x
+            }
+
+            return MAP_WIDTH - x
+        }
+
         var side: Int = 1 // слева = +1, справа = -1
 
         var x: Float = 0f
