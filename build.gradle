@@ -48,8 +48,10 @@ private static String getLr(String suspend) {
             '-s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
             ',address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
             //'-s "python3 ./main.py 0" ' +
-           // '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,Buggy IslandHoleMap,SquareWheelsBuggy' +
-            '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
+           // '-m PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus IslandHoleMap,Bus' +
+          //  '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy' +
+            '-m PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy' +
+           // '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
            // '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus' +
             ''
 }

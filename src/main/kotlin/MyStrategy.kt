@@ -68,6 +68,8 @@ class MyStrategy : Strategy {
                         return
                     }
                     MapType.PillCarcassMap -> {
+                        doPillCarcassJump { doBusStart() }
+                        return
                     }
                     MapType.IslandMap -> {
                     }
@@ -89,6 +91,13 @@ class MyStrategy : Strategy {
                         return
                     }
                     MapType.PillCarcassMap -> {
+                        if (m.carType != CarType.SquareWheelsBuggy) {
+                            doPillCarcassJump {
+                                s.allowedToAttack = false
+                                doSimpleAngleStrat(1f)
+                            }
+                            return
+                        }
                     }
                     MapType.IslandMap -> {
                     }
@@ -99,6 +108,26 @@ class MyStrategy : Strategy {
                 doSimpleAngleStrat(0.7f)
             }
         }
+    }
+
+    private fun doPillCarcassJump(onComplete: () -> Unit) {
+        val x = w.myCar.getMirroredX()
+        var cmd: Int
+        val stopOnX = if (isBus) 400 else if (m.carType == CarType.Buggy) 322 else 300
+        s.reach120x = isBus || s.reach120x || x > 345
+        s.reach440x = (w.myCar.y > 420 && x > stopOnX && s.reach120x) || s.reach440x
+        if (tick < 30) {
+            cmd = 0
+        } else if (s.reach440x) {
+            run(onComplete)
+            return
+        } else if (s.reach120x) {
+            cmd = -1
+        } else {
+            cmd = 1
+        }
+
+        move.set(cmd * w.myCar.side)
     }
 
     private fun doPillHillMapStrat(afterReach: () -> Any) {
@@ -198,6 +227,7 @@ class MyStrategy : Strategy {
         if (delta > 0) {
             cmd *= -1
         }
+        move.set(cmd)
     }
 
     private fun getMinButtonY(myCar: Car): Float {
