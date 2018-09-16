@@ -50,7 +50,7 @@ private static String getLr(String suspend) {
             //'-s "python3 ./main.py 0" ' +
            // '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,Buggy IslandHoleMap,SquareWheelsBuggy' +
            // '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
-            '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Buggy PillHillMap,Bus PillHillMap,Bus' +
+            '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus' +
             ''
 }
 

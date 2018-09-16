@@ -57,6 +57,23 @@ class MyStrategy : Strategy {
 
         when (match.carType) {
             CarType.Bus -> {
+
+                when (match.mapType) {
+                    MapType.PillMap -> {
+                    }
+                    MapType.PillHubbleMap -> {
+                    }
+                    MapType.PillHillMap -> {
+                        doPillHillMapStrat { doBusStart() }
+                        return
+                    }
+                    MapType.PillCarcassMap -> {
+                    }
+                    MapType.IslandMap -> {
+                    }
+                    MapType.IslandHoleMap -> {
+                    }
+                }
                 doBusStart()
                 return
             }
@@ -68,7 +85,7 @@ class MyStrategy : Strategy {
                     MapType.PillHubbleMap -> {
                     }
                     MapType.PillHillMap -> {
-                        doPillHillMapStrat()
+                        doPillHillMapStrat { doSimpleAngleStrat() }
                         return
                     }
                     MapType.PillCarcassMap -> {
@@ -84,16 +101,20 @@ class MyStrategy : Strategy {
         }
     }
 
-    private fun doPillHillMapStrat() {
+    private fun doPillHillMapStrat(afterReach: () -> Any) {
         val x = w.myCar.getMirroredX()
         var cmd = 1
-        s.reach120x = x < 270 || s.reach120x
-        s.reach440x = (s.reach120x && x > 400) || s.reach440x
+        val accelerationX = if (isBus) 120 else 270
+        val stopOnX =  if (isBus) 444 else 400
+
+        s.reach120x = x < accelerationX || s.reach120x
+
+        s.reach440x = (s.reach120x && x > stopOnX) || s.reach440x
         if (tick < 30) {
             cmd = 0
         } else if (s.reach440x) {
             s.allowedToAttack = false
-            doSimpleAngleStrat()
+            run(afterReach)
             return
         } else if (s.reach120x) {
             cmd = 1
