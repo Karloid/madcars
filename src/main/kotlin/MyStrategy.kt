@@ -100,6 +100,18 @@ class MyStrategy : Strategy {
                         }
                     }
                     MapType.IslandMap -> {
+                        @Suppress("NON_EXHAUSTIVE_WHEN")
+                        when (m.carType) {
+                            CarType.Buggy -> {
+                                doRushIsland()
+                                return
+                            }
+                            CarType.SquareWheelsBuggy -> {
+                                doRushIsland()
+                                return
+                            }
+                        }
+
                     }
                     MapType.IslandHoleMap -> {
                     }
@@ -108,6 +120,30 @@ class MyStrategy : Strategy {
                 doSimpleAngleStrat(0.7f)
             }
         }
+    }
+
+    private fun doRushIsland() {
+        val x = w.myCar.getMirroredX()
+        if (x < MAP_WIDTH / 2) {
+            doSimpleAngleStrat(0.11f)
+            return
+        }
+        val abs = abs(w.myCar.angle)
+        doSimpleAngleStrat(Math.max(0.7f, Math.min(abs, 1f)))
+        return
+        //var desiredAngle = (HALF_PI * 0.2) * getMySide()
+
+        var cmd = 1 * getMySide()// main direction
+
+        /* if (abs(w.myCar.angleSpeed) > 0.5) {
+             cmd *= -1
+         }*/
+
+
+        val isCloseToPerfectAngle = abs(0) < HALF_PI / 2
+
+
+        move.set(cmd)
     }
 
     private fun doPillCarcassJump(onComplete: () -> Unit) {
