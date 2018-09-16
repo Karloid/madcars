@@ -4,7 +4,7 @@ class MyStrategy : Strategy {
 
     private var debugMessage: String = ""
 
-    private lateinit var world: World
+    private lateinit var w: World
     private lateinit var move: Move
 
 
@@ -47,14 +47,12 @@ class MyStrategy : Strategy {
 
         //move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
 
-        s.myCarAngle = world.myCar.angle
-        s.myAngleSpeed = s.myLastAngle - s.myCarAngle
-        s.myLastAngle = s.myCarAngle
+        s.myCarAngle = w.myCar.angle
 
-        move.d("myXY ${world.myCar.x.f()} - ${world.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${world.myCar.angle.asPi().f()} " +
-                "angleSpeed ${s.myAngleSpeed}")
+        move.d("myXY ${w.myCar.x.f()} - ${w.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${w.myCar.angle.asPi().f()} " +
+                "angleSpeed ${w.myCar.angleSpeed}")
 
-       // move.d("enemyXY ${world.enemyCar.x.f()} - ${world.enemyCar.y.f()}")
+       // move.d("enemyXY ${w.enemyCar.x.f()} - ${w.enemyCar.y.f()}")
 
 
         when (match.carType) {
@@ -87,9 +85,9 @@ class MyStrategy : Strategy {
     }
 
     private fun doPillHillMapStrat() {
-        val x = world.myCar.getMirroredX()
+        val x = w.myCar.getMirroredX()
         var cmd = 1
-        s.reach120x = x < 120 || s.reach120x
+        s.reach120x = x < 270 || s.reach120x
         s.reach440x = (s.reach120x && x > 400) || s.reach440x
         if (tick < 30) {
             cmd = 0
@@ -103,7 +101,7 @@ class MyStrategy : Strategy {
             cmd = -1
         }
 
-        move.set(cmd * world.myCar.side)
+        move.set(cmd * w.myCar.side)
 
     }
 
@@ -126,8 +124,8 @@ class MyStrategy : Strategy {
 
 
         if (tick > 50 && tick % 5 != 0 && !isBus && s.allowedToAttack) {
-            val myX = world.myCar.x
-            val enemyX = world.enemyCar.x
+            val myX = w.myCar.x
+            val enemyX = w.enemyCar.x
 
             var leftCmd = -1
             var rightCmd = 1
@@ -143,10 +141,10 @@ class MyStrategy : Strategy {
     }
 
     fun doBusStart() {
-        val myCarAngle = world.myCar.angle
+        val myCarAngle = w.myCar.angle
 
         var desiredAngle = (HALF_PI * 1) * getMySide()
-        val minButtonY = getMinButtonY(world.myCar)
+        val minButtonY = getMinButtonY(w.myCar)
         if (minButtonY > maxMinButtonY) {
             maxMinButtonY = minButtonY
             desiredAngleForBus = myCarAngle
@@ -164,8 +162,8 @@ class MyStrategy : Strategy {
                 cmd *= -1
             }
 
-            if (abs(s.myAngleSpeed) > 0.00436248
-                    && ((cmd < 0 && s.myAngleSpeed > 0) || (cmd > 0 && s.myAngleSpeed < 0))) {
+            if (abs(w.myCar.angleSpeed) > 0.00436248
+                    && ((cmd < 0 && w.myCar.angleSpeed < 0) || (cmd > 0 && w.myCar.angleSpeed > 0))) {
                 cmd *= -1
             }
 
@@ -181,7 +179,7 @@ class MyStrategy : Strategy {
         }
     }
 
-    private fun getMinButtonY(myCar: World.Car): Float {
+    private fun getMinButtonY(myCar: Car): Float {
         return match.buttonPoly.map {
             var point = it
             if (getMySide() == -1){
@@ -192,7 +190,7 @@ class MyStrategy : Strategy {
         }.min()!!.toFloat()
     }
 
-    private fun getRotatedButtonPoly(myCar: World.Car): List<Point2D> {
+    private fun getRotatedButtonPoly(myCar: Car): List<Point2D> {
 
         return match.buttonPoly.map { it.rotate(myCar.angle.toDouble()) }
     }
@@ -200,7 +198,10 @@ class MyStrategy : Strategy {
 
     fun pretick(move: Move, world: World) {
         this.move = move;
-        this.world = world;
+        if (tick != 0) {
+            world.processPre(this.w)
+        }
+        this.w = world;
         tick++
 
         if (!debugMessage.isEmpty()) {
@@ -209,7 +210,7 @@ class MyStrategy : Strategy {
         }
     }
 
-    fun getMySide() = world.myCar.side
+    fun getMySide() = w.myCar.side
 
 
     override fun onParsingError(message: String) {
@@ -219,8 +220,6 @@ class MyStrategy : Strategy {
 }
 
 class State {
-    var myLastAngle: Float = 0f
-    var myAngleSpeed: Float = 0f
 
     //pillHill
     var reach120x: Boolean = false
