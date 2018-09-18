@@ -1,5 +1,9 @@
 import java.lang.Math.abs
 
+//TODO plhillmap bus ifs for jump in the middle
+
+//TODO keep best angle for buggy too
+
 class MyStrategy : Strategy {
 
     private var debugMessage: String = ""
