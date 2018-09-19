@@ -104,10 +104,7 @@ class MyStrategy : Strategy {
                             }
                             return
                         } else {
-                            doPillCarcassJumpSquare {
-                                s.allowedToAttack = false
-                                doSimpleAngleStrat(1f)
-                            }
+                            doPillCarcassJumpSquare()
                             return
                         }
                     }
@@ -134,9 +131,9 @@ class MyStrategy : Strategy {
         }
     }
 
-    private fun doPillCarcassJumpSquare(onSuccess: () -> Unit) {
+    private fun doPillCarcassJumpSquare() {
         if (tick > 200) {
-            onSuccess()
+            move.set(0)
             return
         }
 
