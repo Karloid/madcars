@@ -5,6 +5,8 @@ object MainKt {
     private var robot: Strategy = MyStrategy()
 
 
+    private var npeCount: Int = 0
+
     @JvmStatic
     fun main(args: Array<String>) {
         isLocal = args.size > 0
@@ -41,6 +43,16 @@ object MainKt {
                 val move = Move()
                 move.set(0)
                 move.send()
+
+                Thread.sleep(10)
+                if (e is NullPointerException) {
+                    npeCount++
+                }
+                if (npeCount > 100 || isLocal) {
+                    //probably it is the end
+                    println("GG WP bye bye")
+                    return
+                }
             }
         }
     }
