@@ -147,6 +147,12 @@ class MyStrategy : Strategy {
             return
         }
 
+        if ((w.myCar.side == 1 && w.myCar.x > w.enemyCar.x)
+        || (w.myCar.side == -1 && w.myCar.x < w.enemyCar.x)) {
+            doSimpleAngleStrat(0.7f)
+            return
+        }
+
         val cmd = 1 * w.myCar.side
 
         move.set(cmd)
