@@ -111,7 +111,7 @@ class MyStrategy : Strategy {
                         @Suppress("NON_EXHAUSTIVE_WHEN")
                         when (m.carType) {
                             CarType.Buggy -> {
-                                doRushSmartIsland()
+                                doRushSmartIsland2()
                                 return
                             }
                             CarType.SquareWheelsBuggy -> {
@@ -133,6 +133,23 @@ class MyStrategy : Strategy {
     fun printCarInfo(prefix: String, myCar: Car) {
         move.d("$tick ${prefix}XY ${myCar.x.f()} - ${myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${myCar.angle.asPi().f()} " +
                 "angleSpeed ${myCar.angleSpeed} speed ${myCar.speed}")
+    }
+
+    private fun doRushSmartIsland2() {
+
+        if (tick < 60 || w.myCar.point().distance(w.enemyCar.point()) > 300 && Math.abs(w.myCar.angle) > 0.05) {
+            move.set(0)
+            return
+        }
+
+        if (Math.abs(w.myCar.angle) > 0.75) {
+            doSimpleAngleStrat(0.7f)
+            return
+        }
+
+        val cmd = 1 * w.myCar.side
+
+        move.set(cmd)
     }
 
     private fun doRushSmartIsland() {

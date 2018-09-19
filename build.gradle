@@ -45,11 +45,12 @@ build.dependsOn shadowJar
 private static String getLr(String suspend) {
     return 'python3 ../miniaicups/madcars/Runners/localrunner.py ' +
 
-            '-s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
+            '-f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
             ',address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
 
           //  '-f "java -jar ./build/libs/kotlinStrategy14627.jar" ' +
-           // '-f "python3 ./main.py 0" ' +
+            //  '-f "java -jar ./build/libs/kotlinStrategy14642.jar" ' +
+            '-s "python3 ./main.py 0" ' +
             
            // '-m PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus IslandHoleMap,Bus' +
           //  '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy' +
