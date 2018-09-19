@@ -66,6 +66,8 @@ class MyStrategy : Strategy {
                     MapType.PillMap -> {
                     }
                     MapType.PillHubbleMap -> {
+                        doBusPillHubbleMap { doBusStart() }
+                        return
                     }
                     MapType.PillHillMap -> {
                         doPillHillMapStrat { doBusStart() }
@@ -123,6 +125,21 @@ class MyStrategy : Strategy {
 
                 doSimpleAngleStrat(0.7f)
             }
+        }
+    }
+
+    private fun doBusPillHubbleMap(onSuccess: () -> Unit) {
+        if (tick < 30) {
+            move.set(0)
+        } else if (tick < 155) {
+            var cmd = -1
+            cmd *= w.myCar.side
+
+            move.set(cmd)
+        } else if (tick < 200) {
+            doSimpleAngleStrat(1f)
+        } else {
+            onSuccess()
         }
     }
 
