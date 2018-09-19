@@ -1,5 +1,3 @@
-import java.lang.Math.abs
-
 //TODO plhillmap bus ifs for jump in the middle
 
 //TODO keep best angle for buggy too
@@ -51,10 +49,11 @@ class MyStrategy : Strategy {
 
         //move.d(" map_id ${match.mapId}  car_id ${match.carId} tick ${tick} my side ${getMySide()}")
 
-        s.myCarAngle = w.myCar.angle
+        val myCar = w.myCar
+        s.myCarAngle = myCar.angle
 
-        move.d("$tick myXY ${w.myCar.x.f()} - ${w.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${w.myCar.angle.asPi().f()} " +
-                "angleSpeed ${w.myCar.angleSpeed}")
+        printCarInfo("my", myCar)
+        printCarInfo("enemy", w.enemyCar)
 
        // move.d("enemyXY ${w.enemyCar.x.f()} - ${w.enemyCar.y.f()}")
 
@@ -112,7 +111,7 @@ class MyStrategy : Strategy {
                         @Suppress("NON_EXHAUSTIVE_WHEN")
                         when (m.carType) {
                             CarType.Buggy -> {
-                                doRushIsland()
+                                doRushSmartIsland()
                                 return
                             }
                             CarType.SquareWheelsBuggy -> {
@@ -129,6 +128,29 @@ class MyStrategy : Strategy {
                 doSimpleAngleStrat(0.7f)
             }
         }
+    }
+
+    fun printCarInfo(prefix: String, myCar: Car) {
+        move.d("$tick ${prefix}XY ${myCar.x.f()} - ${myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${myCar.angle.asPi().f()} " +
+                "angleSpeed ${myCar.angleSpeed} speed ${myCar.speed}")
+    }
+
+    private fun doRushSmartIsland() {
+        s.needRush =  s.needRush || w.myCar.point().distance(w.enemyCar.point()) < 300
+                || (tick > 80 && w.enemyCar.speed.length() > 1 && Math.abs(w.enemyCar.angle) < 0.1)
+
+        if (tick < 200 && !s.needRush) {
+            move.set(0)
+            return
+        }
+
+        if (Math.abs(w.myCar.angle) > 0.75) {
+            doSimpleAngleStrat(0.7f)
+        }
+
+        val cmd = 1 * w.myCar.side
+
+        move.set(cmd)
     }
 
     private fun doPillCarcassJumpSquare() {
@@ -176,7 +198,7 @@ class MyStrategy : Strategy {
             doSimpleAngleStrat(0.11f)
             return
         }
-        val abs = abs(w.myCar.angle)
+        val abs = Math.abs(w.myCar.angle)
         doSimpleAngleStrat(Math.max(0.7f, Math.min(abs, 1f)))
         return
         //var desiredAngle = (HALF_PI * 0.2) * getMySide()
@@ -188,7 +210,7 @@ class MyStrategy : Strategy {
          }*/
 
 
-        val isCloseToPerfectAngle = abs(0) < HALF_PI / 2
+        val isCloseToPerfectAngle = Math.abs(0) < HALF_PI / 2
 
 
         move.set(cmd)
@@ -249,7 +271,7 @@ class MyStrategy : Strategy {
             cmd *= -1
         }
 
-        val isCloseToPerfectAngle = abs(delta) < HALF_PI / 2
+        val isCloseToPerfectAngle = Math.abs(delta) < HALF_PI / 2
 
         if (tick < ON_AIR_PAUSE && isCloseToPerfectAngle && tick % 5 != 0 && !isBus) {
             cmd *= -1
@@ -263,7 +285,7 @@ class MyStrategy : Strategy {
 
             var leftCmd = -1
             var rightCmd = 1
-            if (abs(s.myCarAngle) > 1) {  //whut
+            if (Math.abs(s.myCarAngle) > 1) {  //whut
                 //move.d("strange switch on")
                 rightCmd = leftCmd
                 leftCmd = 1
@@ -296,7 +318,7 @@ class MyStrategy : Strategy {
                 cmd *= -1
             }
 
-            if (abs(w.myCar.angleSpeed) > 0.00436248
+            if (Math.abs(w.myCar.angleSpeed) > 0.00436248
                     && ((cmd < 0 && w.myCar.angleSpeed < 0) || (cmd > 0 && w.myCar.angleSpeed > 0))) {
                 cmd *= -1
             }
@@ -361,4 +383,5 @@ class State {
     var reach440x: Boolean = false
     var myCarAngle: Float = 0f
     var allowedToAttack: Boolean = true
+    var needRush: Boolean = false
 }
