@@ -10,11 +10,13 @@ object MainKt {
         isLocal = args.size > 0
 
         var gameMessage: JSONObject?
-        gameMessage = JsonIO.readFromStdIn()
-        while (gameMessage != null) {
-            val messageType: MessageType
+
+        while (true) {
             try {
-                messageType = gameMessage.getEnum(MessageType::class.java, "type")
+                gameMessage = JsonIO.readFromStdIn() ?: throw NullPointerException("game message is null!")
+
+                val messageType = gameMessage.getEnum(MessageType::class.java, "type") ?: throw NullPointerException("messageType is null!")
+
                 when (messageType) {
                     MessageType.tick -> {
                         val tickState = World(gameMessage.getJSONObject("params"))
@@ -36,8 +38,10 @@ object MainKt {
                     e.printStackTrace()
                 }
                 robot.onParsingError(e.message ?: "unknown")
+                val move = Move()
+                move.set(0)
+                move.send()
             }
-            gameMessage = JsonIO.readFromStdIn()
         }
     }
 
