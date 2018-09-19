@@ -45,19 +45,20 @@ build.dependsOn shadowJar
 private static String getLr(String suspend) {
     return 'python3 ../miniaicups/madcars/Runners/localrunner.py ' +
 
-            '-s "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
+            '-f "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=' + suspend +
             ',address=5005,quiet=y -jar ./build/libs/kotlinStrategy.jar 1" ' +
 
           //  '-f "java -jar ./build/libs/kotlinStrategy14627.jar" ' +
             //  '-f "java -jar ./build/libs/kotlinStrategy14642.jar" ' +
-            '-f "python3 ./main.py 0" ' +
+           //   '-s "java -jar ./build/libs/kotlinStrategy.jar" ' +
+           // '-s "python3 ./main.py 0" ' +
             
            // '-m PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus PillCarcassMap,Bus IslandHoleMap,Bus' +
           //  '-m PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,Buggy' +
-         //   '-m PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy' +
+              '-m PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy PillCarcassMap,SquareWheelsBuggy' +
            // '-m IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy IslandHoleMap,SquareWheelsBuggy' +
           //  '-m IslandMap,SquareWheelsBuggy IslandMap,SquareWheelsBuggy IslandMap,SquareWheelsBuggy IslandMap,SquareWheelsBuggy IslandMap,SquareWheelsBuggy' +
-            '-m IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy ' +
+           // '-m IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy IslandMap,Buggy ' +
            // '-m PillHillMap,Buggy PillHillMap,SquareWheelsBuggy PillHillMap,Buggy PillHillMap,Buggy PillHillMap,SquareWheelsBuggy' +
           //  '-m PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus PillHillMap,Bus' +
             //'-m PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus PillHubbleMap,Bus' +
