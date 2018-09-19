@@ -53,7 +53,7 @@ class MyStrategy : Strategy {
 
         s.myCarAngle = w.myCar.angle
 
-        move.d("myXY ${w.myCar.x.f()} - ${w.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${w.myCar.angle.asPi().f()} " +
+        move.d("$tick myXY ${w.myCar.x.f()} - ${w.myCar.y.f()} a: ${s.myCarAngle.f()} as PI: ${w.myCar.angle.asPi().f()} " +
                 "angleSpeed ${w.myCar.angleSpeed}")
 
        // move.d("enemyXY ${w.enemyCar.x.f()} - ${w.enemyCar.y.f()}")
@@ -103,6 +103,12 @@ class MyStrategy : Strategy {
                                 doSimpleAngleStrat(1f)
                             }
                             return
+                        } else {
+                            doPillCarcassJumpSquare {
+                                s.allowedToAttack = false
+                                doSimpleAngleStrat(1f)
+                            }
+                            return
                         }
                     }
                     MapType.IslandMap -> {
@@ -128,6 +134,30 @@ class MyStrategy : Strategy {
         }
     }
 
+    private fun doPillCarcassJumpSquare(onSuccess: () -> Unit) {
+        if (tick > 200) {
+            onSuccess()
+            return
+        }
+
+        var cmd = -1 * w.myCar.side
+        if (tick < 5) {
+            move.set(cmd)
+            return
+        } else if (tick in 85..95 /*|| tick in 95..100*/) {
+            move.set(cmd * -1)
+            return
+        } else if (tick > 150) {
+            move.set(cmd * -1)
+            return
+        } else if (tick > 50) {
+            move.set(cmd)
+            return
+        }
+
+        move.set(0)
+    }
+    
     private fun doBusPillHubbleMap(onSuccess: () -> Unit) {
         if (tick < 30) {
             move.set(0)
