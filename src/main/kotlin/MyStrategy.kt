@@ -104,7 +104,7 @@ class MyStrategy : Strategy {
                             }
                             return
                         } else {
-                            doPillCarcassJumpSquareSide()
+                            doPillCarcassJumpSquare()
                             return
                         }
                     }
@@ -177,56 +177,28 @@ class MyStrategy : Strategy {
         move.set(cmd)
     }
 
-    private fun doPillCarcassJumpSquareSide() {
-        if (w.myCar.side == -1) {
-
-            if (tick > 200) {
-                move.set(0)
-                return
-            }
-
-            var cmd = -1 * w.myCar.side
-            if (tick < 5) {
-                move.set(cmd)
-                return
-            } else if (tick in 85..95 /*|| tick in 95..100*/) {
-                move.set(cmd * -1)
-                return
-            } else if (tick > 150) {
-                move.set(cmd * -1)
-                return
-            } else if (tick > 50) {
-                move.set(cmd)
-                return
-            }
-
+    private fun doPillCarcassJumpSquare() {
+        if (tick > 200) {
             move.set(0)
-        } else {
-            if (tick > 170) {
-                move.set(0)
-                return
-            }
-
-            var cmd = -1 * w.myCar.side
-            if (tick < 6) {
-                move.set(cmd)
-                return
-            } else if (tick in 88..95 /*|| tick in 95..100*/) {
-                move.set(cmd * -1)
-                return
-            } else if (tick > 160) {
-                move.set(-1)
-                return
-            }else if (tick > 150) {
-                move.set(cmd * -1)
-                return
-            } else if (tick > 50) {
-                move.set(cmd)
-                return
-            }
-
-            move.set(0)
+            return
         }
+
+        var cmd = -1 * w.myCar.side
+        if (tick < 5) {
+            move.set(cmd)
+            return
+        } else if (tick in 85..95 /*|| tick in 95..100*/) {
+            move.set(cmd * -1)
+            return
+        } else if (tick > 150) {
+            move.set(cmd * -1)
+            return
+        } else if (tick > 50) {
+            move.set(cmd)
+            return
+        }
+
+        move.set(0)
     }
     
     private fun doBusPillHubbleMap(onSuccess: () -> Unit) {
